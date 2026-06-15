@@ -361,6 +361,7 @@ const jakePlayerSprite = new THREE.Sprite(
   })
 );
 jakePlayerSprite.scale.set(4.5, 6.0, 1);
+jakePlayerSprite.center.set(0.5, 0.0); // anchor at bottom — sprite grows upward from feet
 jakePlayerSprite.visible = false; // shown only while game is running
 scene.add(jakePlayerSprite);      // world-space — not inside playerGroup
 // ─────────────────────────────────────────────────────────────────────────────
@@ -823,7 +824,16 @@ function update(){
   // ── Sync Jake sprite to player position every frame ──────────────────────
   playerGroup.getWorldPosition(worldPos);
   jakePlayerSprite.position.copy(worldPos);
-  // Slide squish: compress sprite vertically when sliding (matches playerGroup.scale.y=0.35)
+  // With bottom-anchor (center.y=0), position.y = base of sprite.
+  // playerGroup.position.y already includes playerY (jump offset) and slide offset.
+  // We subtract the resting offset (0.75) so feet sit on the ground at rest,
+  // but still rise with playerY when jumping.
+  jakePlayerSprite.position.y = playerGroup.position.y - 0.75;
+  // Move Jake closer to camera (same Z as player, which is 0 in world space)
+  // Camera is at Z=8.5 looking at Z=-3. Player is at Z=0. 
+  // Push Jake toward camera slightly so it doesn't look distant.
+  jakePlayerSprite.position.z = worldPos.z + 1.5;
+  // Slide squish: compress sprite vertically when sliding
   jakePlayerSprite.scale.set(4.5, sliding ? 2.1 : 6.0, 1);
   // ─────────────────────────────────────────────────────────────────────────
 
