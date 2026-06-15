@@ -208,6 +208,10 @@ const sharedMats = {
   window: new THREE.MeshLambertMaterial({color:0xffee88}),
 };
 
+// Make player material transparent with 0 opacity
+sharedMats.player.transparent = true;
+sharedMats.player.opacity = 0;
+
 // ═══════════════════════════════════════════════════════════════════════════════
 // CUBE-TO-IMAGE EFFECT SYSTEM
 // Pre-create exactly 5 reusable sprites at startup. Zero allocations in the
